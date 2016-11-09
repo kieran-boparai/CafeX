@@ -2,13 +2,14 @@ package com.cafex.billing;
 
 /**
  * A MenuItem object will represent a single item on an order
+ * ** Story 4 ** - Changes to incorporate Service Charges as an item that can be added to an order (but is not listed in Menu)
  * @author kieran.boparai
  *
  */
 public class MenuItem {
 	
 	// list of possible item types
-	public enum MenuItems{COLD_FOOD, COLD_DRINK, HOT_FOOD, HOT_DRINK};
+	public enum MenuItems{COLD_FOOD, COLD_DRINK, HOT_FOOD, HOT_DRINK, SVCE_CHARGE};
 	
 	// For each item we will store the name f the product, what kind of product it is and the price
 	private String itemName;

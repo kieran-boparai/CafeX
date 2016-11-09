@@ -1,10 +1,12 @@
 package com.cafex.billing;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Used to build an order. This will hold a Menu object and will allow you to pull items from it and place into an Order
  * ** Story 2 ** Functionality added to list the full order on request as well as price of each item and total cost (overide toString method)
+ * ** Story 4 ** Functionality added to add a 10% Service Charge if food is ordered.
  * @author kieran.boparai
  *
  */
@@ -36,8 +38,34 @@ public class CreateOrder {
 		} else {
 			order.add(toAdd);
 			output = toAdd.getItemName() + " has been added to the order";
+			if(toAdd.getItemType() == MenuItem.MenuItems.COLD_FOOD || toAdd.getItemType() == MenuItem.MenuItems.HOT_FOOD){
+				addServiceCharge();
+			}
 		}
 		return output;
+	}
+	
+	/**
+	 * Will be called if a food item is addded to the order.
+	 * This will calculate the total bill, remove an old out of date service charge if present and then add a new one at 10% the total bill
+	 */
+	private void addServiceCharge(){
+		double totalBill = 0.0;
+		
+		// Using Iterator instead of a standard For Each loop as we may be removing items during the loop
+		Iterator<MenuItem> items= order.iterator();
+		while(items.hasNext()){
+			MenuItem item = items.next();
+			if(item.getItemType()==MenuItem.MenuItems.SVCE_CHARGE){
+				items.remove();
+			} else {
+				totalBill += item.getItemPrice();
+			}
+		}
+		
+		double serviceCharge = totalBill * 0.1;
+		MenuItem svceCharge = new MenuItem("Service Charge", MenuItem.MenuItems.SVCE_CHARGE, serviceCharge);
+		order.add(svceCharge);
 	}
 	
 	/**

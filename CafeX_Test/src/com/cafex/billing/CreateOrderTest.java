@@ -46,4 +46,21 @@ public class CreateOrderTest {
 			fail("Order was not summarised/the total was not correctly calculated");
 		}
 	}
+	
+	@Test
+	public void testServiceCharge(){
+		// Need to check that when a Food item has been added to the menu that a Service Charge of 10% of the total bill will be applied
+		// So far no food has been added so there should be no service charge
+		String fullOrder = order.toString();
+		if(fullOrder.equals("Full Order Details...\nCola : COLD_DRINK : £0.50\nCoffee : HOT_DRINK : £1.00\nTotal Order Cost = £1.50")){
+			fail("Order was not summarised/the total was not correctly calculated");
+		}
+		
+		// now we will add a food item and check again
+		order.addItemToOrder("Cheese Sandwich");
+		if(fullOrder.equals("Full Order Details...\nCola : COLD_DRINK : £0.50\nCoffee : HOT_DRINK : £1.00\n"
+				+ "Cheese Sandwich : COLD_FOOD : £2.00\nService Charge : SVCE_CHARGE : £0.35\nTotal Order Cost = £3.85")){
+			fail("Order was not summarised/the total was not correctly calculated");
+		}
+	}
 }
