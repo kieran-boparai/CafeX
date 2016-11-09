@@ -35,4 +35,15 @@ public class CreateOrderTest {
 			fail("Filtering for invalid items or reporting has failed");
 		}
 	}
+	
+	@Test
+	public void testToString(){
+		// an overriden toString will be used to output the contents of the order and total cost
+		// so far the order contains 1 cola, we will add a coffee and then call the toString
+		order.addItemToOrder("coffee");
+		String fullOrder = order.toString();
+		if(fullOrder.equals("Full Order Details...\nCola : COLD_DRINK : £0.50\nCoffee : HOT_DRINK : £1.00\nTotal Order Cost = £1.50")){
+			fail("Order was not summarised/the total was not correctly calculated");
+		}
+	}
 }

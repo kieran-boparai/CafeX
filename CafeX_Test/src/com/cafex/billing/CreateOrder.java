@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Used to build an order. This will hold a Menu object and will allow you to pull items from it and place into an Order
+ * ** Story 2 ** Functionality added to list the full order on request as well as price of each item and total cost (overide toString method)
  * @author kieran.boparai
  *
  */
@@ -39,6 +40,22 @@ public class CreateOrder {
 		return output;
 	}
 	
+	/**
+	 * The to String method has been overidden to provide a list of all items in the order as well as the price for each item
+	 * and the total cost of the order.
+	 */
+	public String toString(){
+		String output = "Full Order...\n";
+		double totalCost = 0.0;
+		for(MenuItem item : order){
+			totalCost += item.getItemPrice();
+			output += item.toString() + "\n";
+		}
+		
+		output += "Total Order Cost = £" + String.format("%.2f", totalCost);
+		return output;
+	}
+	
 	
 	// Main method will be used to run the CreateOrder class which will invoke other classes as required.
 	public static void main(String[] args){
@@ -47,5 +64,6 @@ public class CreateOrder {
 		System.out.println(order.addItemToOrder("cheese Sandwich"));
 		System.out.println(order.addItemToOrder("coffee"));
 		System.out.println(order.addItemToOrder("Steak Sandwich"));
+		System.out.println(order.toString());
 	}
 }
