@@ -78,5 +78,13 @@ public class CreateOrderTest {
 		if(!fullOrder.contains("Service Charge : SVCE_CHARGE : £1.50")){ //4.50+2+1= 7.5 * 0.2 = 1.50
 			fail("4 - Incorrect Service Charge applied to order");
 		}
+		
+		// Will no test rounding by adding the Test Item created in Menu which has a price of 1.597
+		order.addItemToOrder("test item");
+		fullOrder = order.toString();
+		// new Service Charge should be (4.5+2+1+1.597= 9.097 * 0.2 = 1.8194 - rounded to 1.82
+		if(!fullOrder.contains("Service Charge : SVCE_CHARGE : £1.82")){
+			fail("5 - Service Charge rounding has failed");
+		}
 	}
 }

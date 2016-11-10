@@ -8,6 +8,7 @@ import java.util.Iterator;
  * ** Story 2 ** Functionality added to list the full order on request as well as price of each item and total cost (overide toString method)
  * ** Story 4 ** Functionality added to add a 10% Service Charge if food is ordered.
  * ** Story 5 ** Functionality added to add a 20% Service Charge if hot food is ordered.
+ * ** Story 6 ** Changes to addServiceCharge to ensure it is rounded to 2dp
  * @author kieran.boparai
  *
  */
@@ -77,6 +78,8 @@ public class CreateOrder {
 		}
 		
 		double serviceCharge = totalBill * serviceChargeRate;
+		String formatCharge = String.format("%.2f", serviceCharge); // String.format can easily round the value to 2dp
+		serviceCharge = Double.valueOf(formatCharge); // Now convert back to double value 
 		MenuItem svceCharge = new MenuItem("Service Charge", MenuItem.MenuItems.SVCE_CHARGE, serviceCharge);
 		order.add(svceCharge);
 	}
@@ -101,10 +104,11 @@ public class CreateOrder {
 	// Main method will be used to run the CreateOrder class which will invoke other classes as required.
 	public static void main(String[] args){
 		CreateOrder order = new CreateOrder();
-		System.out.println(order.addItemToOrder("cola"));
+		//System.out.println(order.addItemToOrder("cola"));
 		System.out.println(order.addItemToOrder("cheese Sandwich"));
-		System.out.println(order.addItemToOrder("coffee"));
-		System.out.println(order.addItemToOrder("Steak Sandwich"));
+		//System.out.println(order.addItemToOrder("coffee"));
+		//System.out.println(order.addItemToOrder("Steak Sandwich"));
+		System.out.println(order.addItemToOrder("test item"));
 		System.out.println(order.toString());
 	}
 }

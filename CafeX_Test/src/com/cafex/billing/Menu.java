@@ -22,16 +22,20 @@ public class Menu {
 	
 	/**
 	 * Used to initialise the items into the Menu. This is private and can only be called on initialisation of a new Menu object.
+	 * ** Story 6 ** Additional item "TestItem" has been added to test the rounding capability of the Service Charge calculations
+	 * Also removed Cast to Float as it was uneccessary.
 	 */
 	private void setupMenu(){
-		MenuItem toAdd = new MenuItem("Cola", MenuItem.MenuItems.COLD_DRINK, (float) 0.50);
+		MenuItem toAdd = new MenuItem("Cola", MenuItem.MenuItems.COLD_DRINK, 0.50);
 		menu.put("cola", toAdd);
-		toAdd = new MenuItem("Coffee", MenuItem.MenuItems.HOT_DRINK, (float) 1.00);
+		toAdd = new MenuItem("Coffee", MenuItem.MenuItems.HOT_DRINK, 1.00);
 		menu.put("coffee", toAdd);
-		toAdd = new MenuItem("Cheese Sandwich", MenuItem.MenuItems.COLD_FOOD, (float) 2.00);
+		toAdd = new MenuItem("Cheese Sandwich", MenuItem.MenuItems.COLD_FOOD, 2.00);
 		menu.put("cheesesandwich", toAdd);
-		toAdd = new MenuItem("Steak Sandwich", MenuItem.MenuItems.HOT_FOOD, (float) 4.50);
+		toAdd = new MenuItem("Steak Sandwich", MenuItem.MenuItems.HOT_FOOD, 4.50);
 		menu.put("steaksandwich", toAdd);
+		toAdd = new MenuItem("Test Item", MenuItem.MenuItems.COLD_DRINK, 1.597);
+		menu.put("testitem", toAdd);
 	}
 	
 	/**
