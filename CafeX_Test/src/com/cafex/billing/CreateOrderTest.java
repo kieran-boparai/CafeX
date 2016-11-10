@@ -8,6 +8,7 @@ import org.junit.Test;
 /**
  * Will be used to test the CreateOrder functionality. The current set of tests will include:
  * 	Adding a single item to the order and confirming it is there.
+ * 	Ensuring the correct Service Charge is added
  * @author kieran.boparai
  *
  */
@@ -68,6 +69,14 @@ public class CreateOrderTest {
 		fullOrder = order.toString();
 		if(!fullOrder.contains("Service Charge : SVCE_CHARGE : £0.30")){
 			fail("3 - Service Charge was not recalculated correctly");
+		}
+		
+		// So far order only contains Cold Food and service charge = 10%
+		// now add Hot Food and service charge should be 20%
+		order.addItemToOrder("steak sandwich");
+		fullOrder = order.toString();
+		if(!fullOrder.contains("Service Charge : SVCE_CHARGE : £1.50")){ //4.50+2+1= 7.5 * 0.2 = 1.50
+			fail("4 - Incorrect Service Charge applied to order");
 		}
 	}
 }

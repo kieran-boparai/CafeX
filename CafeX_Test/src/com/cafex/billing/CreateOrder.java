@@ -7,6 +7,7 @@ import java.util.Iterator;
  * Used to build an order. This will hold a Menu object and will allow you to pull items from it and place into an Order
  * ** Story 2 ** Functionality added to list the full order on request as well as price of each item and total cost (overide toString method)
  * ** Story 4 ** Functionality added to add a 10% Service Charge if food is ordered.
+ * ** Story 5 ** Functionality added to add a 20% Service Charge if hot food is ordered.
  * @author kieran.boparai
  *
  */
@@ -15,6 +16,7 @@ public class CreateOrder {
 	private Menu menu;
 	private ArrayList<MenuItem> order;
 	private boolean containsFood; // will be used to decide if service charge needs to be added.
+	private double serviceChargeRate = 0.0; // Will be changed depending on if cold or hot food is added
 	
 	/**
 	 * Initialise the menu object and the ArrayList that will hold the items for the order
@@ -40,9 +42,15 @@ public class CreateOrder {
 		} else {
 			order.add(toAdd);
 			output = toAdd.getItemName() + " has been added to the order";
-			if(toAdd.getItemType() == MenuItem.MenuItems.COLD_FOOD || toAdd.getItemType() == MenuItem.MenuItems.HOT_FOOD){
+			MenuItem.MenuItems toAddType = toAdd.getItemType();
+			if(toAddType == MenuItem.MenuItems.HOT_FOOD){ // If this is Hot food then we apply 20% charge rate
 				containsFood = true;
+				serviceChargeRate = 0.2;
+			} else if(toAddType == MenuItem.MenuItems.COLD_FOOD && serviceChargeRate != 0.2){ // This is cold food and we are not already applying the hot food charge
+				containsFood = true;
+				serviceChargeRate = 0.1;
 			}
+			
 			if(containsFood){ // check if there is food in the order (regardless of if current item is food)
 				addServiceCharge();
 			}
@@ -68,7 +76,7 @@ public class CreateOrder {
 			}
 		}
 		
-		double serviceCharge = totalBill * 0.1;
+		double serviceCharge = totalBill * serviceChargeRate;
 		MenuItem svceCharge = new MenuItem("Service Charge", MenuItem.MenuItems.SVCE_CHARGE, serviceCharge);
 		order.add(svceCharge);
 	}
@@ -96,7 +104,7 @@ public class CreateOrder {
 		System.out.println(order.addItemToOrder("cola"));
 		System.out.println(order.addItemToOrder("cheese Sandwich"));
 		System.out.println(order.addItemToOrder("coffee"));
-	//	System.out.println(order.addItemToOrder("Steak Sandwich"));
+		System.out.println(order.addItemToOrder("Steak Sandwich"));
 		System.out.println(order.toString());
 	}
 }
