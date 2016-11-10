@@ -59,8 +59,15 @@ public class CreateOrderTest {
 		// now we will add a food item and check again
 		order.addItemToOrder("Cheese Sandwich");
 		fullOrder = order.toString();
-		if(!fullOrder.contains("Service Charge")){
+		if(!fullOrder.contains("Service Charge : SVCE_CHARGE : £0.20")){
 			fail("2 - Service Charge not correctly added");
+		}
+		
+		// add another drink and check that service charge is correctly recalculated
+		order.addItemToOrder("coffee"); // total bill is now 2+1 = £3.00 - Service Charge is £0.30
+		fullOrder = order.toString();
+		if(!fullOrder.contains("Service Charge : SVCE_CHARGE : £0.30")){
+			fail("3 - Service Charge was not recalculated correctly");
 		}
 	}
 }

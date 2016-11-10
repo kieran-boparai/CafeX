@@ -14,6 +14,7 @@ public class CreateOrder {
 	
 	private Menu menu;
 	private ArrayList<MenuItem> order;
+	private boolean containsFood; // will be used to decide if service charge needs to be added.
 	
 	/**
 	 * Initialise the menu object and the ArrayList that will hold the items for the order
@@ -21,6 +22,7 @@ public class CreateOrder {
 	public CreateOrder(){
 		menu= new Menu();
 		order = new ArrayList<MenuItem>();
+		containsFood = false;
 	}
 	
 	/**
@@ -39,6 +41,9 @@ public class CreateOrder {
 			order.add(toAdd);
 			output = toAdd.getItemName() + " has been added to the order";
 			if(toAdd.getItemType() == MenuItem.MenuItems.COLD_FOOD || toAdd.getItemType() == MenuItem.MenuItems.HOT_FOOD){
+				containsFood = true;
+			}
+			if(containsFood){ // check if there is food in the order (regardless of if current item is food)
 				addServiceCharge();
 			}
 		}
@@ -91,7 +96,7 @@ public class CreateOrder {
 		System.out.println(order.addItemToOrder("cola"));
 		System.out.println(order.addItemToOrder("cheese Sandwich"));
 		System.out.println(order.addItemToOrder("coffee"));
-		System.out.println(order.addItemToOrder("Steak Sandwich"));
+	//	System.out.println(order.addItemToOrder("Steak Sandwich"));
 		System.out.println(order.toString());
 	}
 }
