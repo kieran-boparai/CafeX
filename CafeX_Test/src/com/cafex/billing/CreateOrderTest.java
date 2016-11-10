@@ -9,6 +9,7 @@ import org.junit.Test;
  * Will be used to test the CreateOrder functionality. The current set of tests will include:
  * 	Adding a single item to the order and confirming it is there.
  * 	Ensuring the correct Service Charge is added
+ *  Ensure Service Charge is correctly limited given the scenario
  * @author kieran.boparai
  *
  */
@@ -86,5 +87,25 @@ public class CreateOrderTest {
 		if(!fullOrder.contains("Service Charge : SVCE_CHARGE : £1.82")){
 			fail("5 - Service Charge rounding has failed");
 		}
+	}
+	
+	@Test
+	public void testServiceChargeLimit(){
+		// Create an order with high value of Cold Food Items
+		for(int i = 0; i < 200; i++){
+			order.addItemToOrder("CheeseSandwich");
+		}// total value = 2*200 = 400 * 0.1 = £40 serviceCharge (Will not be limited to £20)
+		String fullOrder = order.toString();
+		if(!fullOrder.contains("Service Charge : SVCE_CHARGE : £40.00")){
+			fail("1 - Service Charge limiting should not be applied here");
+		}
+		
+		// add a single Hot food item
+		order.addItemToOrder("SteakSandwich"); // total value = 2*200 + 4.50 = 404.50 * 0.2 = £80.90 serviceCharge (Limited to £20)
+		fullOrder = order.toString();
+		if(!fullOrder.contains("Service Charge : SVCE_CHARGE : £20.00")){
+			fail("2 - Service Charge limiting should have been applied here");
+		}
+		
 	}
 }

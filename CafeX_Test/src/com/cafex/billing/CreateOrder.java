@@ -9,6 +9,11 @@ import java.util.Iterator;
  * ** Story 4 ** Functionality added to add a 10% Service Charge if food is ordered.
  * ** Story 5 ** Functionality added to add a 20% Service Charge if hot food is ordered.
  * ** Story 6 ** Changes to addServiceCharge to ensure it is rounded to 2dp
+ * ** Story 7 ** Added functionality to limit the 20% Service Charge to a maximum of £20
+ * 				 Also added HOT_FOOD_RATE & COLD_FOOD_RATE to improve code readability
+ * 				NOTE - Due to the wording of Story 7 this limit will only be applied when the 20% Service Charge is being applied
+ * 						(i.e. Hot Food is on the Menu). It is still possible for an order containing Cold Food to exceed £20 Service Charge.
+ * 						If the wording of Story 7 were changed there would be changes to the code to apply a limit to Cold Food orders also.
  * @author kieran.boparai
  *
  */
@@ -17,6 +22,8 @@ public class CreateOrder {
 	private Menu menu;
 	private ArrayList<MenuItem> order;
 	private boolean containsFood; // will be used to decide if service charge needs to be added.
+	private static final double HOT_FOOD_RATE = 0.2;
+	private static final double COLD_FOOD_RATE = 0.1;
 	private double serviceChargeRate = 0.0; // Will be changed depending on if cold or hot food is added
 	
 	/**
@@ -46,10 +53,10 @@ public class CreateOrder {
 			MenuItem.MenuItems toAddType = toAdd.getItemType();
 			if(toAddType == MenuItem.MenuItems.HOT_FOOD){ // If this is Hot food then we apply 20% charge rate
 				containsFood = true;
-				serviceChargeRate = 0.2;
+				serviceChargeRate = HOT_FOOD_RATE;
 			} else if(toAddType == MenuItem.MenuItems.COLD_FOOD && serviceChargeRate != 0.2){ // This is cold food and we are not already applying the hot food charge
 				containsFood = true;
-				serviceChargeRate = 0.1;
+				serviceChargeRate = COLD_FOOD_RATE;
 			}
 			
 			if(containsFood){ // check if there is food in the order (regardless of if current item is food)
@@ -78,8 +85,18 @@ public class CreateOrder {
 		}
 		
 		double serviceCharge = totalBill * serviceChargeRate;
-		String formatCharge = String.format("%.2f", serviceCharge); // String.format can easily round the value to 2dp
-		serviceCharge = Double.valueOf(formatCharge); // Now convert back to double value 
+		
+		/* Check to see if the Service Charge has exceeded £20
+		*  As per the note at the top the wording of the Story suggests this limit should only be applied if the 20% charge is applied
+		*  If the 10% Service Charge is applied no limit will be applied
+		*  In order to apply the limit to all Service Charges you would simply remove the condition in the if statement that check ths serviceChargeRate
+		*/
+		if(serviceChargeRate == HOT_FOOD_RATE && serviceCharge > 20.0){
+			serviceCharge = 20.0;
+		} else {
+			String formatCharge = String.format("%.2f", serviceCharge); // String.format can easily round the value to 2dp
+			serviceCharge = Double.valueOf(formatCharge); // Now convert back to double value
+		}
 		MenuItem svceCharge = new MenuItem("Service Charge", MenuItem.MenuItems.SVCE_CHARGE, serviceCharge);
 		order.add(svceCharge);
 	}
@@ -105,10 +122,11 @@ public class CreateOrder {
 	public static void main(String[] args){
 		CreateOrder order = new CreateOrder();
 		//System.out.println(order.addItemToOrder("cola"));
-		System.out.println(order.addItemToOrder("cheese Sandwich"));
+		//System.out.println(order.addItemToOrder("cheese Sandwich"));
 		//System.out.println(order.addItemToOrder("coffee"));
-		//System.out.println(order.addItemToOrder("Steak Sandwich"));
-		System.out.println(order.addItemToOrder("test item"));
+		for(int i = 0; i < 200; i++)
+			System.out.println(order.addItemToOrder("Steak Sandwich"));
+		//System.out.println(order.addItemToOrder("test item"));
 		System.out.println(order.toString());
 	}
 }
