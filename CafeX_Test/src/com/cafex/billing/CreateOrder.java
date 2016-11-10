@@ -14,6 +14,7 @@ import java.util.Iterator;
  * 				NOTE - Due to the wording of Story 7 this limit will only be applied when the 20% Service Charge is being applied
  * 						(i.e. Hot Food is on the Menu). It is still possible for an order containing Cold Food to exceed £20 Service Charge.
  * 						If the wording of Story 7 were changed there would be changes to the code to apply a limit to Cold Food orders also.
+ * ** Story 8 ** Formatted the output to create a clearer split between the different charges
  * @author kieran.boparai
  *
  */
@@ -108,12 +109,25 @@ public class CreateOrder {
 	public String toString(){
 		String output = "Full Order...\n";
 		double totalCost = 0.0;
+		// need to know if a service charge was applied
+		double totalWithCharge;
+		MenuItem serviceChargeApplied = null;
 		for(MenuItem item : order){
-			totalCost += item.getItemPrice();
-			output += item.toString() + "\n";
+			if(item.getItemType() == MenuItem.MenuItems.SVCE_CHARGE){
+				serviceChargeApplied = item; // don't inculude the service charge with the initial total
+			} else {
+				totalCost += item.getItemPrice();
+				output += item.toString() + "\n";
+			}
 		}
-		
-		output += "Total Order Cost = £" + String.format("%.2f", totalCost);
+		output += "------------------------------------\n";
+		output += "Total Order Cost = £" + String.format("%.2f", totalCost) + "\n";
+		if(serviceChargeApplied != null){
+			output += "*** Service Charge = £" + String.format("%.2f", serviceChargeApplied.getItemPrice()) + "\n";
+			totalWithCharge = totalCost + serviceChargeApplied.getItemPrice();
+			output += "*** Total Cost With Service Charge = £" + String.format("%.2f", totalWithCharge) + "\n";
+		}
+		output += "------------------------------------";
 		return output;
 	}
 	
@@ -121,11 +135,10 @@ public class CreateOrder {
 	// Main method will be used to run the CreateOrder class which will invoke other classes as required.
 	public static void main(String[] args){
 		CreateOrder order = new CreateOrder();
-		//System.out.println(order.addItemToOrder("cola"));
-		//System.out.println(order.addItemToOrder("cheese Sandwich"));
-		//System.out.println(order.addItemToOrder("coffee"));
-		for(int i = 0; i < 200; i++)
-			System.out.println(order.addItemToOrder("Steak Sandwich"));
+		System.out.println(order.addItemToOrder("cola"));
+		System.out.println(order.addItemToOrder("cheese Sandwich"));
+		System.out.println(order.addItemToOrder("coffee"));
+		System.out.println(order.addItemToOrder("Steak Sandwich"));
 		//System.out.println(order.addItemToOrder("test item"));
 		System.out.println(order.toString());
 	}
